@@ -1,0 +1,38 @@
+[
+  {
+    "id": "App",
+    "parentId": null,
+    "text": "Start",
+    "childrenId": ["s1i0", "s1i1", "s1i2"]
+  },
+  {
+    "id": "s1i0",
+    "parentId": "App",
+    "text": "s1i0 - text",
+    "childrenId": []
+  },
+  {
+    "id": "s1i1",
+    "parentId": "App",
+    "text": "s1i1 - text",
+    "childrenId": ["s2i0", "s2i1"]
+  },
+  {
+    "id": "s1i2",
+    "parentId": "App",
+    "text": "s1i2 - text",
+    "childrenId": []
+  },
+  {
+    "id": "s2i0",
+    "parentId": "s1i1",
+    "text": "ssssssssss",
+    "childrenId": []
+  },
+  {
+    "id": "s2i1",
+    "parentId": "s1i1",
+    "text": "dddddddddddd",
+    "childrenId": []
+  }
+]
