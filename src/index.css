@@ -16,3 +16,18 @@ code {
   padding: 0px;
   list-style: none;
 }
+button {
+  border: none;
+  background-color: #ffffff00;
+  cursor: pointer;
+  transition: all 500ms;
+  border-radius: 10px;
+  padding: 0px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+button:hover {
+  transform: scale(1.05);
+  background-color: rgba(162, 161, 161, 0.284);
+}

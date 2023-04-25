@@ -1,18 +1,68 @@
-.note {
-  border: 1px solid #000;
+.listContainer {
+  background-color: rgb(232, 231, 231);
+  padding: 10px;
+}
+.list {
   padding: 10px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 20px;
 }
-.moveButtonContainer {
+.controllBtnContainer {
   display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.note {
+  border: 2px solid #000;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  gap: 20px;
+
+  background-color: #fff;
+}
+.noteContainer {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   gap: 30px;
-  background-color: #e1e1e1;
 }
 .input {
   width: 300px;
   height: 100px;
+  text-align: center;
+}
+.removeMeBtn {
+  width: 30px;
+  height: 30px;
+}
+.moveBtn {
+  width: 100%;
+  background-color: green;
+}
+.moveBtn:hover {
+  background-color: rgb(11, 156, 11);
+  transform: scale(1.02);
+}
+.addSublistBtn {
+  color: green;
+  display: flex;
+  align-items: center;
+}
+.removeSublistBtn {
+  color: red;
+  display: flex;
+  align-items: center;
+}
+.btnAssignment {
+  color: #787878;
+  font-size: 10px;
+}
+.noteContainer {
+  display: flex;
+  align-items: center;
 }

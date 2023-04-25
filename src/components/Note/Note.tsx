@@ -9,6 +9,13 @@ import {
   removeSublist,
   updateTextOfNote,
 } from "../../redux/notes/notesOptions";
+
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+
 let timer: ReturnType<typeof setTimeout>;
 
 export default function Note({
@@ -29,10 +36,6 @@ export default function Note({
 
   useEffect(() => {
     const newNote = notes.find((item) => item._id === noteId);
-
-    // const newNote = !noteId
-    //   ? notes.find((item) => item.parentId === null)
-    //   : notes.find((item) => item._id === noteId);
 
     if (newNote) {
       setCurrentNote(newNote);
@@ -73,7 +76,7 @@ export default function Note({
           updatedNote: { ...currentNote, text },
         })
       );
-    }, 500);
+    }, 1000);
   };
 
   return (
@@ -83,8 +86,15 @@ export default function Note({
         // First Note
         //
         <>
+          <input
+            className={style.input}
+            type="text"
+            placeholder="Enter new note"
+            value={currentNote && currentNote.text}
+            onChange={(e) => changeText(e.target.value)}
+          />
+
           <ul className={style.list}>
-            My id: {currentNote._id}. My childrens:
             {currentNote &&
               currentNote.childrenId.map((item: string, index: number) => (
                 <Note
@@ -99,19 +109,16 @@ export default function Note({
                   removeMe={removeChildById}
                   moveMe={moveChildById}
                 />
-                // <li key={item}>key={item}</li>
               ))}
           </ul>
 
-          <input
-            type="text"
-            placeholder="Enter new note"
-            value={currentNote && currentNote.text}
-            onChange={(e) => changeText(e.target.value)}
-          />
-
-          <button type="button" onClick={clickOnAddBtn}>
-            Add
+          <button
+            className={style.addSublistBtn}
+            type="button"
+            onClick={clickOnAddBtn}
+          >
+            Add new note
+            <AddCircleOutlineIcon />
           </button>
         </>
       ) : (
@@ -119,29 +126,36 @@ export default function Note({
         // Other Notes
         //
         <li className={style.note}>
-          <div className={style.moveButtonContainer}>
-            {!firstNote && (
-              <button
-                type="button"
-                onClick={() => moveMe && moveMe(currentNote._id, "up")}
-              >
-                Up
-              </button>
-            )}
+          {!firstNote && (
+            <button
+              className={style.moveBtn}
+              type="button"
+              onClick={() => moveMe && moveMe(currentNote._id, "up")}
+            >
+              <ExpandLessIcon />
+            </button>
+          )}
+          <div className={style.noteContainer}>
+            <input
+              className={style.input}
+              type="text"
+              placeholder="Enter new note"
+              value={currentNote.text}
+              onChange={(e) => changeText(e.target.value)}
+            />
 
-            {!lastNote && (
-              <button
-                type="button"
-                onClick={() => moveMe && moveMe(currentNote._id, "down")}
-              >
-                Down
-              </button>
-            )}
+            <button
+              className={style.removeMeBtn}
+              type="button"
+              onClick={() => removeMe && removeMe(currentNote._id)}
+            >
+              <RemoveCircleOutlineIcon />
+            </button>
           </div>
+          <div className={style.listContainer}>
+            <ul className={style.list}>
+              {currentNote.childrenId.length === 0 && "You can add sublists"}
 
-          <div>
-            My id: {currentNote._id}
-            <ul>
               {currentNote.childrenId.map((item: string, index: number) => (
                 <Note
                   notes={notes}
@@ -157,31 +171,38 @@ export default function Note({
                 />
               ))}
             </ul>
-            <input
-              type="text"
-              placeholder="Enter new note"
-              value={currentNote.text}
-              onChange={(e) => changeText(e.target.value)}
-            />
-            <div>
-              <button type="button" onClick={clickOnAddBtn}>
-                Add Sublist
+
+            <div className={style.controllBtnContainer}>
+              <button
+                type="button"
+                onClick={clickOnAddBtn}
+                className={style.addSublistBtn}
+              >
+                <span className={style.btnAssignment}>Add new sublist</span>
+                <AddCircleOutlineIcon />
               </button>
 
               {currentNote.childrenId.length > 0 && (
-                <button type="button" onClick={deleteSublist}>
-                  Remove Sublist
+                <button
+                  type="button"
+                  onClick={deleteSublist}
+                  className={style.removeSublistBtn}
+                >
+                  <HighlightOffIcon />
+                  <span className={style.btnAssignment}>Remove sublists</span>
                 </button>
               )}
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => removeMe && removeMe(currentNote._id)}
-          >
-            Remove me
-          </button>
+          {!lastNote && (
+            <button
+              className={style.moveBtn}
+              type="button"
+              onClick={() => moveMe && moveMe(currentNote._id, "down")}
+            >
+              <ExpandMoreIcon />
+            </button>
+          )}
         </li>
       )}
     </>
