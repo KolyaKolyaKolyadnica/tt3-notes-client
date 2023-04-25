@@ -1,49 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addNewNote, removeNote, deleteSublist, updNote } from "./notesOptions";
-import { INote } from "../../types/types";
+import {
+  addNewNote,
+  removeNote,
+  getAllNotes,
+  removeSublist,
+  updateTextOfNote,
+  moveNote,
+} from "./notesOptions";
+import { IInitialState, INote } from "../../types/types";
 
-const notesArr = [
-  {
-    id: "App",
-    parentId: null,
-    text: "Start",
-    childrenId: ["s1i0", "s1i1", "s1i2"],
-  },
-  {
-    id: "s1i0",
-    parentId: "App",
-    text: "s1i0 - text",
-    childrenId: [],
-  },
-  {
-    id: "s1i1",
-    parentId: "App",
-    text: "s1i1 - text",
-    childrenId: ["s2i0", "s2i1"],
-  },
-  {
-    id: "s1i2",
-    parentId: "App",
-    text: "s1i2 - text",
-    childrenId: [],
-  },
-  {
-    id: "s2i0",
-    parentId: "s1i1",
-    text: "ssssssssss",
-    childrenId: [],
-  },
-  {
-    id: "s2i1",
-    parentId: "s1i1",
-    text: "dddddddddddd",
-    childrenId: [],
-  },
-] as INote[];
+const startingNote = {
+  _id: "App",
+  parentId: null,
+  text: "Start",
+  childrenId: [],
+};
 
 const initialState = {
-  notes: notesArr,
-};
+  notes: [startingNote],
+  isLoading: false,
+  error: null,
+} as IInitialState;
 
 const notesSlice = createSlice({
   name: "notes",
@@ -51,18 +28,63 @@ const notesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(addNewNote.fulfilled, (state, { payload }) => {
-        state.notes = [...state.notes, payload];
+
+      //Fulfilled
+
+      .addCase(getAllNotes.fulfilled, (state, { payload }) => {
+        state.notes = [...payload];
+        state.isLoading = false;
       })
-      .addCase(updNote.fulfilled, (state, { payload }) => {
-        state.notes[payload.index] = payload.updatedNote;
+      .addCase(addNewNote.fulfilled, (state, { payload }) => {
+        state.notes = [...payload];
+        state.isLoading = false;
       })
       .addCase(removeNote.fulfilled, (state, { payload }) => {
-        state.notes = payload;
+        state.notes = [...payload];
+        state.isLoading = false;
       })
-      .addCase(deleteSublist.fulfilled, (state, { payload }) => {
-        state.notes = payload;
-      });
+      .addCase(removeSublist.fulfilled, (state, { payload }) => {
+        state.notes = [...payload];
+        state.isLoading = false;
+      })
+      .addCase(updateTextOfNote.fulfilled, (state, { payload }) => {
+        state.notes = [...payload];
+        state.isLoading = false;
+      })
+      .addCase(moveNote.fulfilled, (state, { payload }) => {
+        state.notes = [...payload];
+        state.isLoading = false;
+      })
+
+      //Pending
+
+      .addCase(getAllNotes.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(addNewNote.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(removeNote.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(removeSublist.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(updateTextOfNote.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+      .addCase(moveNote.pending, (state, { payload }) => {
+        state.isLoading = true;
+      })
+
+      //Rejected
+
+      .addCase(getAllNotes.rejected, (state, { payload }) => {})
+      .addCase(addNewNote.rejected, (state, { payload }) => {})
+      .addCase(removeNote.rejected, (state, { payload }) => {})
+      .addCase(removeSublist.rejected, (state, { payload }) => {})
+      .addCase(updateTextOfNote.rejected, (state, { payload }) => {})
+      .addCase(moveNote.rejected, (state, { payload }) => {});
   },
 });
 

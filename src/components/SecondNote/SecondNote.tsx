@@ -1,14 +1,14 @@
 import style from "./SecondNote.module.css";
 import { INote, ISecondNote } from "../../types/types";
-import { useState } from "react";
-import getMigratedNotesArr from "../../utils/getMigratedNotesArr";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import {
   addNewNote,
+  moveNote,
   removeNote,
-  updNote,
-  deleteSublist,
+  removeSublist,
+  updateTextOfNote,
 } from "../../redux/notes/notesOptions";
 
 export default function SecondNote({
@@ -22,65 +22,50 @@ export default function SecondNote({
   const { notes } = useAppSelector((store) => store.notes);
   const dispatch = useAppDispatch();
 
-  const [childrenId, setChildrenId] = useState<number>(0);
   const [currentNote, setCurrentNote] = useState<INote>(
-    notes.find((item) => item.id === noteId) || {
-      id: noteId,
+    notes.find((item) => item._id === noteId) || {
+      _id: noteId,
       parentId,
       text: "",
       childrenId: [],
     }
   );
 
+  useEffect(() => {
+    const curNoteFromAll = notes.find((item) => item._id === noteId);
+
+    if (curNoteFromAll) {
+      setCurrentNote(curNoteFromAll);
+    }
+  }, [notes, dispatch]);
+
   const clickOnAddBtn = () => {
     const newNote = {
-      id: `${currentNote.id}-${childrenId.toString()}`,
-      parentId: currentNote.id,
-      text: "",
+      parentId: currentNote._id,
       childrenId: [],
+      text: "",
     };
-
-    setCurrentNote({
-      ...currentNote,
-      childrenId: [...currentNote.childrenId, newNote.id],
-    });
-    setChildrenId(childrenId + 1);
-
     dispatch(addNewNote(newNote));
   };
   const removeChildById = (id: string) => {
-    const filteredNotes = currentNote.childrenId.filter((item) => item !== id);
-    setCurrentNote({ ...currentNote, childrenId: [...filteredNotes] });
-
-    dispatch(removeNote({ id, notes }));
+    dispatch(removeNote(id));
   };
-  const removeSublist = () => {
-    setCurrentNote({ ...currentNote, childrenId: [] });
-
-    dispatch(
-      deleteSublist({
-        notes,
-        updatedNote: { ...currentNote, childrenId: [] },
-      })
-    );
+  const deleteSublist = () => {
+    dispatch(removeSublist(currentNote._id));
   };
   const moveChildById = (id: string, direction: string) => {
-    const arr = getMigratedNotesArr(id, currentNote.childrenId, direction);
-    setCurrentNote({ ...currentNote, childrenId: arr });
-
     dispatch(
-      updNote({
-        notes,
-        updatedNote: { ...currentNote, childrenId: arr },
+      moveNote({
+        childId: id,
+        parent: currentNote,
+        direction,
       })
     );
   };
   const changeText = (text: string) => {
-    setCurrentNote({ ...currentNote, text });
-
     dispatch(
-      updNote({
-        notes,
+      updateTextOfNote({
+        id: currentNote._id,
         updatedNote: { ...currentNote, text },
       })
     );
@@ -90,26 +75,26 @@ export default function SecondNote({
     <li className={style.note}>
       <div className={style.moveButtonContainer}>
         {!firstNote && (
-          <button type="button" onClick={() => moveMe(currentNote.id, "up")}>
+          <button type="button" onClick={() => moveMe(currentNote._id, "up")}>
             Up
           </button>
         )}
 
         {!lastNote && (
-          <button type="button" onClick={() => moveMe(currentNote.id, "down")}>
+          <button type="button" onClick={() => moveMe(currentNote._id, "down")}>
             Down
           </button>
         )}
       </div>
 
       <div>
-        My id: {currentNote.id}
+        My id: {currentNote._id}
         <ul>
           {currentNote.childrenId.map((item: string, index: number) => (
             <SecondNote
               key={item}
               noteId={item}
-              parentId={currentNote.id}
+              parentId={currentNote._id}
               firstNote={index === 0 ? true : false}
               lastNote={
                 index === currentNote.childrenId.length - 1 ? true : false
@@ -131,14 +116,14 @@ export default function SecondNote({
           </button>
 
           {currentNote.childrenId.length > 0 && (
-            <button type="button" onClick={removeSublist}>
+            <button type="button" onClick={deleteSublist}>
               Remove Sublist
             </button>
           )}
         </div>
       </div>
 
-      <button type="button" onClick={() => removeMe(currentNote.id)}>
+      <button type="button" onClick={() => removeMe(currentNote._id)}>
         Remove me
       </button>
     </li>

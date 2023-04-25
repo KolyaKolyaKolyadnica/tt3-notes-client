@@ -1,7 +1,14 @@
 .App {
-  border: 1px solid #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  background-color: #5acf1a;
+  padding: 40px;
+}
+.App-loading {
+  background-color: #e6a122;
+  padding: 40px;
+}
+.content {
+  box-shadow: 1px 1px 5px #000;
+  background-color: #ffffff;
+  border-radius: 40px;
+  padding: 40px;
 }
