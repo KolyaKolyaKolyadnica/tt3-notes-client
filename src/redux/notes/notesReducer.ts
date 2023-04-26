@@ -81,21 +81,27 @@ const notesSlice = createSlice({
 
       .addCase(getAllNotes.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.error = payload;
       })
       .addCase(addNewNote.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.error = payload;
       })
       .addCase(removeNote.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.error = payload;
       })
       .addCase(removeSublist.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.error = payload;
       })
       .addCase(updateTextOfNote.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.error = payload;
       })
       .addCase(moveNote.rejected, (state, { payload }) => {
         state.isLoading = false;
+        state.error = payload;
       });
   },
 });

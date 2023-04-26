@@ -10,11 +10,13 @@ import {
   updateTextOfNote,
 } from "../../redux/notes/notesOptions";
 
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import HeaderOfNote from "../HeaderOfNote/HeaderOfNote";
+import List from "../List/List";
+import Input from "../Input/Input";
+import AddButton from "../AddButton/AddButton";
+import { useAppSelector } from "../../hooks/useAppSelector";
+
+import { ToastContainer, toast } from "react-toastify";
 
 let timer: ReturnType<typeof setTimeout>;
 
@@ -22,7 +24,6 @@ export default function Note({
   notes,
 
   noteId,
-  parentId,
   firstNote,
   lastNote,
   removeMe,
@@ -86,123 +87,46 @@ export default function Note({
         // First Note
         //
         <>
-          <input
-            className={style.input}
-            type="text"
-            placeholder="Enter new note"
-            value={currentNote && currentNote.text}
-            onChange={(e) => changeText(e.target.value)}
+          <List
+            notes={notes}
+            currentNote={currentNote}
+            removeChildById={removeChildById}
+            moveChildById={moveChildById}
           />
-
-          <ul className={style.list}>
-            {currentNote &&
-              currentNote.childrenId.map((item: string, index: number) => (
-                <Note
-                  notes={notes}
-                  key={item}
-                  noteId={item}
-                  parentId={currentNote._id}
-                  firstNote={index === 0 ? true : false}
-                  lastNote={
-                    index === currentNote.childrenId.length - 1 ? true : false
-                  }
-                  removeMe={removeChildById}
-                  moveMe={moveChildById}
-                />
-              ))}
-          </ul>
-
-          <button
-            className={style.addSublistBtn}
-            type="button"
-            onClick={clickOnAddBtn}
-          >
-            Add new note
-            <AddCircleOutlineIcon />
-          </button>
+          <Input currentNote={currentNote} changeText={changeText} />
+          <AddButton action={clickOnAddBtn} usage={"Add"} />
         </>
       ) : (
         //
         // Other Notes
         //
         <li className={style.note}>
-          {!firstNote && (
-            <button
-              className={style.moveBtn}
-              type="button"
-              onClick={() => moveMe && moveMe(currentNote._id, "up")}
-            >
-              <ExpandLessIcon />
-            </button>
-          )}
+          <HeaderOfNote
+            firstNote={firstNote}
+            lastNote={lastNote}
+            removeMe={removeMe}
+            moveMe={moveMe}
+            currentNote={currentNote}
+          />
+
+          <List
+            notes={notes}
+            currentNote={currentNote}
+            removeChildById={removeChildById}
+            moveChildById={moveChildById}
+          />
+
           <div className={style.noteContainer}>
-            <input
-              className={style.input}
-              type="text"
-              placeholder="Enter new note"
-              value={currentNote.text}
-              onChange={(e) => changeText(e.target.value)}
-            />
-
-            <button
-              className={style.removeMeBtn}
-              type="button"
-              onClick={() => removeMe && removeMe(currentNote._id)}
-            >
-              <RemoveCircleOutlineIcon />
-            </button>
-          </div>
-          <div className={style.listContainer}>
-            <ul className={style.list}>
-              {currentNote.childrenId.length === 0 && "You can add sublists"}
-
-              {currentNote.childrenId.map((item: string, index: number) => (
-                <Note
-                  notes={notes}
-                  key={item}
-                  noteId={item}
-                  parentId={currentNote._id}
-                  firstNote={index === 0 ? true : false}
-                  lastNote={
-                    index === currentNote.childrenId.length - 1 ? true : false
-                  }
-                  removeMe={removeChildById}
-                  moveMe={moveChildById}
-                />
-              ))}
-            </ul>
-
             <div className={style.controllBtnContainer}>
-              <button
-                type="button"
-                onClick={clickOnAddBtn}
-                className={style.addSublistBtn}
-              >
-                <span className={style.btnAssignment}>Add new sublist</span>
-                <AddCircleOutlineIcon />
-              </button>
+              <AddButton action={clickOnAddBtn} usage={"Add Sublist"} />
 
               {currentNote.childrenId.length > 0 && (
-                <button
-                  type="button"
-                  onClick={deleteSublist}
-                  className={style.removeSublistBtn}
-                >
-                  <HighlightOffIcon />
-                  <span className={style.btnAssignment}>Remove sublists</span>
-                </button>
+                <AddButton action={deleteSublist} usage={"Remove Sublists"} />
               )}
             </div>
+
+            <Input currentNote={currentNote} changeText={changeText} />
           </div>
-          {!lastNote && (
-            <button
-              className={style.moveBtn}
-              type="button"
-              onClick={() => moveMe && moveMe(currentNote._id, "down")}
-            >
-              <ExpandMoreIcon />
-            </button>
-          )}
         </li>
       )}
     </>

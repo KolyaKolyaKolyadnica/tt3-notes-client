@@ -1,0 +1,11 @@
+.list {
+  background-color: rgb(232, 231, 231);
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.emptyListText {
+  font-size: 10px;
+  color: #787878;
+}
