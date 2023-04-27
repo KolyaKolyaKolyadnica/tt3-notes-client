@@ -1,10 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { INote, INewNote, IMoveNote } from "../../types/types";
+import { INote, INewNote } from "../../types/types";
 import api from "../../api/notesApi";
 
 interface IUpdNote {
   id: string;
   updatedNote: INote;
+}
+
+interface IMoveNote {
+  childId: string;
+  parent: INote;
+  direction: string;
 }
 
 export const getAllNotes = createAsyncThunk(

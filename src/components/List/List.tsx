@@ -1,10 +1,16 @@
-import { IList } from "../../types/types";
+import { INote } from "../../types/types";
 import Note from "../Note/Note";
 import style from "./List.module.css";
 
+interface IList {
+  notes: INote[];
+  currentNote: INote;
+  removeChildById: (id: string) => void;
+  moveChildById: (id: string, direction: string) => void;
+}
+
 export default function List({
   notes,
-
   currentNote,
   removeChildById,
   moveChildById,
@@ -21,10 +27,10 @@ export default function List({
           key={item}
           noteId={item}
           parentId={currentNote._id}
-          firstNote={index === 0 ? true : false}
-          lastNote={index === currentNote.childrenId.length - 1 ? true : false}
-          removeMe={removeChildById}
-          moveMe={moveChildById}
+          isFirstNote={index === 0 && true}
+          isLastNote={index === currentNote.childrenId.length - 1 && true}
+          removeCurrentNote={removeChildById}
+          moveCurrentNote={moveChildById}
         />
       ))}
     </ul>

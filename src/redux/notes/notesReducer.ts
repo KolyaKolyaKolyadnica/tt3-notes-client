@@ -7,7 +7,7 @@ import {
   updateTextOfNote,
   moveNote,
 } from "./notesOptions";
-import { IInitialState, INote } from "../../types/types";
+import { INote } from "../../types/types";
 
 const startingNote = {
   _id: "App",
@@ -16,6 +16,11 @@ const startingNote = {
   childrenId: [],
 };
 
+interface IInitialState {
+  notes: INote[];
+  isLoading: boolean;
+  error: any;
+}
 const initialState = {
   notes: [startingNote],
   isLoading: false,

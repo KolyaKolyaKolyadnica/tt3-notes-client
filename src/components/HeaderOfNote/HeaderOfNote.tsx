@@ -4,50 +4,54 @@ import { INote } from "../../types/types";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Button from "../Button/Button";
 
 interface IHeaderOfNote {
-  firstNote: boolean | undefined;
-  lastNote: boolean | undefined;
-  removeMe: ((id: string) => void) | undefined;
-  moveMe: ((id: string, direction: string) => void) | undefined;
+  isFirstNote: boolean;
+  isLastNote: boolean;
+  removeCurrentNote: (id: string) => void;
+  moveCurrentNote: (id: string, direction: string) => void;
   currentNote: INote;
 }
 
 export default function HeaderOfNote({
-  firstNote,
-  lastNote,
-  removeMe,
-  moveMe,
+  isFirstNote,
+  isLastNote,
+  removeCurrentNote,
+  moveCurrentNote,
   currentNote,
 }: IHeaderOfNote) {
   return (
     <div className={style.controllerContainer}>
       <div className={style.moveBtnContainer}>
-        {!firstNote && (
-          <button
-            className={style.moveBtnUp}
-            type="button"
-            onClick={() => moveMe && moveMe(currentNote._id, "up")}
+        {!isFirstNote && (
+          <Button
+            action={() =>
+              moveCurrentNote && moveCurrentNote(currentNote._id, "up")
+            }
           >
-            <ExpandLessIcon />
-          </button>
+            <span className={style.arrow}>
+              <ExpandLessIcon />
+            </span>
+          </Button>
         )}
-
-        {!lastNote && (
-          <button
-            className={style.moveBtnDown}
-            type="button"
-            onClick={() => moveMe && moveMe(currentNote._id, "down")}
+        {!isLastNote && (
+          <Button
+            action={() =>
+              moveCurrentNote && moveCurrentNote(currentNote._id, "down")
+            }
           >
-            <ExpandMoreIcon />
-          </button>
+            <span className={style.arrow}>
+              <ExpandMoreIcon />
+            </span>
+          </Button>
         )}
       </div>
 
       <button
         className={style.removeMeBtn}
         type="button"
-        onClick={() => removeMe && removeMe(currentNote._id)}
+        onClick={() => removeCurrentNote && removeCurrentNote(currentNote._id)}
       >
         <DeleteForeverIcon />
       </button>

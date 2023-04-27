@@ -1,5 +1,5 @@
 import style from "./Note.module.css";
-import { INote, INoteComponent } from "../../types/types";
+import { INote } from "../../types/types";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import {
@@ -13,21 +13,30 @@ import {
 import HeaderOfNote from "../HeaderOfNote/HeaderOfNote";
 import List from "../List/List";
 import Input from "../Input/Input";
-import AddButton from "../AddButton/AddButton";
-import { useAppSelector } from "../../hooks/useAppSelector";
+import Button from "../Button/Button";
 
-import { ToastContainer, toast } from "react-toastify";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 let timer: ReturnType<typeof setTimeout>;
 
+interface INoteComponent {
+  notes: INote[];
+  noteId?: string;
+  parentId?: string;
+  isFirstNote?: boolean;
+  isLastNote?: boolean;
+  removeCurrentNote?: (id: string) => void;
+  moveCurrentNote?: (id: string, direction: string) => void;
+}
+
 export default function Note({
   notes,
-
   noteId,
-  firstNote,
-  lastNote,
-  removeMe,
-  moveMe,
+  isFirstNote = false,
+  isLastNote = false,
+  removeCurrentNote,
+  moveCurrentNote,
 }: INoteComponent) {
   const dispatch = useAppDispatch();
 
@@ -94,20 +103,27 @@ export default function Note({
             moveChildById={moveChildById}
           />
           <Input currentNote={currentNote} changeText={changeText} />
-          <AddButton action={clickOnAddBtn} usage={"Add"} />
+          <Button action={clickOnAddBtn}>
+            Add
+            <span className={style.addIcon}>
+              <AddCircleOutlineIcon />
+            </span>
+          </Button>
         </>
       ) : (
         //
         // Other Notes
         //
         <li className={style.note}>
-          <HeaderOfNote
-            firstNote={firstNote}
-            lastNote={lastNote}
-            removeMe={removeMe}
-            moveMe={moveMe}
-            currentNote={currentNote}
-          />
+          {removeCurrentNote && moveCurrentNote && (
+            <HeaderOfNote
+              isFirstNote={isFirstNote}
+              isLastNote={isLastNote}
+              removeCurrentNote={removeCurrentNote}
+              moveCurrentNote={moveCurrentNote}
+              currentNote={currentNote}
+            />
+          )}
 
           <List
             notes={notes}
@@ -118,10 +134,20 @@ export default function Note({
 
           <div className={style.noteContainer}>
             <div className={style.controllBtnContainer}>
-              <AddButton action={clickOnAddBtn} usage={"Add Sublist"} />
+              <Button action={clickOnAddBtn}>
+                Add Sublist
+                <span className={style.addIcon}>
+                  <AddCircleOutlineIcon />
+                </span>
+              </Button>
 
               {currentNote.childrenId.length > 0 && (
-                <AddButton action={deleteSublist} usage={"Remove Sublists"} />
+                <Button action={deleteSublist}>
+                  <span className={style.removeIcon}>
+                    <HighlightOffIcon />
+                  </span>
+                  Remove Sublists
+                </Button>
               )}
             </div>
 

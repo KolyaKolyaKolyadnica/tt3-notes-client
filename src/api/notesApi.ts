@@ -58,7 +58,7 @@ class NotesApi {
     parent: INote,
     direction: string
   ): Promise<INote[]> {
-    const requestStr = `${this.URL}/move-${direction}/${childId}`;
+    const requestStr = `${this.URL}/move/${childId}?direction=${direction}`;
 
     await axios.put(requestStr, parent);
 

@@ -1,6 +1,10 @@
-import { IInput } from "../../types/types";
+import { INote } from "../../types/types";
 import style from "./Input.module.css";
 
+interface IInput {
+  currentNote: INote;
+  changeText: (text: string) => void;
+}
 export default function Input({ currentNote, changeText }: IInput) {
   return (
     <input
