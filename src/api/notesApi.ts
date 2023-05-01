@@ -21,7 +21,7 @@ class NotesApi {
     return this.getData(requestStr);
   }
 
-  async addNote(note: INewNote): Promise<any> {
+  async addNote(note: INewNote): Promise<INote[]> {
     const requestStr = `${this.URL}`;
 
     await axios.post(requestStr, note);

@@ -13,13 +13,7 @@ interface IMoveNote {
   direction: string;
 }
 
-interface IFailedResponse {
-  rejectValue: {
-    error: string;
-  };
-}
-
-export const getAllNotes = createAsyncThunk<INote[], void, IFailedResponse>(
+export const getAllNotes = createAsyncThunk(
   "notes/getAllNotes",
   async (_, thunkAPI) => {
     try {
@@ -34,7 +28,7 @@ export const addNewNote = createAsyncThunk(
   "notes/addNewNote",
   async (newNote: INewNote, thunkAPI) => {
     try {
-      const data: INote[] = await api.addNote(newNote);
+      const data = await api.addNote(newNote);
 
       return data;
     } catch (error: any) {
@@ -46,7 +40,7 @@ export const removeNote = createAsyncThunk(
   "notes/removeNote",
   async (id: string, thunkAPI) => {
     try {
-      const data: INote[] = await api.removeNote(id);
+      const data = await api.removeNote(id);
 
       return data;
     } catch (error: any) {
@@ -58,7 +52,7 @@ export const removeSublist = createAsyncThunk(
   "notes/removeSublist",
   async (id: string, thunkAPI) => {
     try {
-      const data: INote[] = await api.removeSublist(id);
+      const data = await api.removeSublist(id);
 
       return data;
     } catch (error: any) {
@@ -71,7 +65,7 @@ export const updateTextOfNote = createAsyncThunk(
   "notes/updateTextOfNote",
   async ({ id, updatedNote }: IUpdNote, thunkAPI) => {
     try {
-      const data: INote[] = await api.updateTextOfNote(id, updatedNote);
+      const data = await api.updateTextOfNote(id, updatedNote);
 
       return data;
     } catch (error: any) {
@@ -84,7 +78,7 @@ export const moveNote = createAsyncThunk(
   "notes/moveNote",
   async ({ childId, parent, direction }: IMoveNote, thunkAPI) => {
     try {
-      const data: INote[] = await api.moveNote(childId, parent, direction);
+      const data = await api.moveNote(childId, parent, direction);
 
       return data;
     } catch (error: any) {
