@@ -1,38 +1,43 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import { useNavigate, useRoutes } from "react-router-dom";
+import Navigation from "./components/Navigation/Navigation";
+import NotePage from "./pages/NotePage/NotePage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import style from "./App.module.css";
 import { useAppDispatch } from "./hooks/useAppDispatch";
-import { getAllNotes } from "./redux/notes/notesOptions";
-import Note from "./components/Note/Note";
 import { useAppSelector } from "./hooks/useAppSelector";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import api from "./api/notesApi";
+import { checkAuth } from "./redux/auth/authOptions";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { notes, isLoading, error } = useAppSelector((store) => store.notes);
-  const [allNotes, setAllNotes] = useState(notes);
+  const { isAutorizated } = useAppSelector((store) => store.auth);
+
+  let navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getAllNotes());
+    console.log("mount");
+
+    if (localStorage.getItem("notes-token")) {
+      dispatch(checkAuth());
+    }
   }, []);
 
   useEffect(() => {
-    setAllNotes(notes);
-  }, [notes]);
+    isAutorizated ? navigate("note") : navigate("");
+  }, [isAutorizated]);
 
-  useEffect(() => {
-    if (!error) return;
-    toast.error(error);
-  }, [error]);
-
-  return (
-    <div className={isLoading ? "App-loading " : "App"}>
-      <div className="content">
-        <Note notes={notes} noteId={allNotes[0]._id} />
-      </div>
-      <ToastContainer />
-    </div>
-  );
+  const pages = useRoutes([
+    {
+      element: <Navigation />,
+      children: [
+        { path: "/", element: <LoginPage /> },
+        { path: "note", element: <NotePage /> },
+        { path: "/*", element: <div>Not found</div> },
+      ],
+    },
+  ]);
+  return <div className={style.App}>{pages}</div>;
 }
 
 export default App;

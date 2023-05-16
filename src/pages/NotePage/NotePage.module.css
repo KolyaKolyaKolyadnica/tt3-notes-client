@@ -1,12 +1,14 @@
-.App {
+.app {
   background-color: green;
   padding: 10px;
   min-height: 100vh;
+  width: calc(100% - 20px);
 }
-.App-loading {
+.appLoading {
   background-color: #e6a122;
   padding: 10px;
   min-height: 100vh;
+  width: calc(100% - 20px);
 }
 .content {
   box-shadow: 1px 1px 5px #000;

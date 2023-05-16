@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  border: 1px solid #000;
+  gap: 10px;
+}
+.inputContainer {
+}
+.comment {
+  font-size: 14px;
+}
+.input {
+}
+.button {
+}

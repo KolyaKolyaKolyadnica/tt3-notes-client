@@ -17,6 +17,8 @@ import Button from "../Button/Button";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { useAppSelector } from "../../hooks/useAppSelector";
+import store from "../../redux/store";
 
 let timer: ReturnType<typeof setTimeout>;
 
@@ -39,9 +41,11 @@ export default function Note({
   moveCurrentNote,
 }: INoteComponent) {
   const dispatch = useAppDispatch();
+  const user = useAppSelector((store) => store.auth.user);
 
   const [currentNote, setCurrentNote] = useState<INote>(
-    notes.find((item) => item._id === noteId) || notes[0]
+    notes.find((item) => item._id === noteId && item.userId === user.id) ||
+      notes[0]
   );
 
   useEffect(() => {
@@ -57,14 +61,15 @@ export default function Note({
       parentId: currentNote._id,
       childrenId: [],
       text: "",
+      userId: user.id,
     };
     dispatch(addNewNote(newNote));
   };
   const removeChildById = (id: string) => {
-    dispatch(removeNote(id));
+    dispatch(removeNote({ id, userId: user.id }));
   };
   const deleteSublist = () => {
-    dispatch(removeSublist(currentNote._id));
+    dispatch(removeSublist({ id: currentNote._id, userId: user.id }));
   };
   const moveChildById = (id: string, direction: string) => {
     dispatch(
@@ -72,6 +77,7 @@ export default function Note({
         childId: id,
         parent: currentNote,
         direction,
+        userId: user.id,
       })
     );
   };

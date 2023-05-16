@@ -1,9 +1,10 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-
 import notesReducer from "./notes/notesReducer";
+import authReducer from "./auth/authReducer";
 
 const rootReducer = combineReducers({
   notes: notesReducer,
+  auth: authReducer,
 });
 
 const store = configureStore({

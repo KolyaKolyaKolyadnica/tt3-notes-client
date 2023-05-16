@@ -14,6 +14,7 @@ const startingNote = {
   parentId: null,
   text: "Start",
   childrenId: [],
+  userId: "Просто временная заглушка",
 };
 
 interface IInitialState {
@@ -22,7 +23,7 @@ interface IInitialState {
   error: any;
 }
 const initialState = {
-  notes: [startingNote],
+  notes: [],
   isLoading: false,
   error: null,
 } as IInitialState;
@@ -37,7 +38,7 @@ const notesSlice = createSlice({
       //Fulfilled
 
       .addCase(getAllNotes.fulfilled, (state, { payload }) => {
-        state.notes = [...payload];
+        state.notes = payload;
         state.isLoading = false;
       })
       .addCase(addNewNote.fulfilled, (state, { payload }) => {

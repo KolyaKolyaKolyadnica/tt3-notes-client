@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #4588d1;
+  width: calc(100% - 60px);
+  height: 50px;
+  padding: 0 30px;
+}
+.text {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+}
+.btnGroup {
+  display: flex;
+  gap: 10px;
+}
+.buttons {
+  border: 2px solid #ffffff;
+  padding: 5px 10px;
+  border-radius: 30px;
+}

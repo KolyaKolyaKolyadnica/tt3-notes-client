@@ -11,13 +11,14 @@ interface IMoveNote {
   childId: string;
   parent: INote;
   direction: string;
+  userId: string;
 }
 
 export const getAllNotes = createAsyncThunk(
   "notes/getAllNotes",
-  async (_, thunkAPI) => {
+  async (userId: string, thunkAPI) => {
     try {
-      const data = await api.fetchAllNotes();
+      const data = await api.fetchAllNotes(userId);
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -38,9 +39,9 @@ export const addNewNote = createAsyncThunk(
 );
 export const removeNote = createAsyncThunk(
   "notes/removeNote",
-  async (id: string, thunkAPI) => {
+  async ({ id, userId }: { id: string; userId: string }, thunkAPI) => {
     try {
-      const data = await api.removeNote(id);
+      const data = await api.removeNote(id, userId);
 
       return data;
     } catch (error: any) {
@@ -50,9 +51,9 @@ export const removeNote = createAsyncThunk(
 );
 export const removeSublist = createAsyncThunk(
   "notes/removeSublist",
-  async (id: string, thunkAPI) => {
+  async ({ id, userId }: { id: string; userId: string }, thunkAPI) => {
     try {
-      const data = await api.removeSublist(id);
+      const data = await api.removeSublist(id, userId);
 
       return data;
     } catch (error: any) {
@@ -67,6 +68,8 @@ export const updateTextOfNote = createAsyncThunk(
     try {
       const data = await api.updateTextOfNote(id, updatedNote);
 
+      console.log("TEXT UPD data ======", data);
+
       return data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message);
@@ -76,9 +79,9 @@ export const updateTextOfNote = createAsyncThunk(
 
 export const moveNote = createAsyncThunk(
   "notes/moveNote",
-  async ({ childId, parent, direction }: IMoveNote, thunkAPI) => {
+  async ({ childId, parent, direction, userId }: IMoveNote, thunkAPI) => {
     try {
-      const data = await api.moveNote(childId, parent, direction);
+      const data = await api.moveNote(childId, parent, direction, userId);
 
       return data;
     } catch (error: any) {
