@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { INote, INewNote } from "../types/types";
 
 interface IUserBody {
@@ -20,7 +20,6 @@ axiosInstance.interceptors.response.use(
   (config) => config,
   async (error) => {
     const originalRequest = error.config;
-    console.log("axiosInstance.interceptors.response. error===", error);
 
     if (
       error.response.status == 401 &&
@@ -29,11 +28,10 @@ axiosInstance.interceptors.response.use(
     ) {
       originalRequest._isRetry = true;
       try {
-        const response = await axios.get("http://localhost:4000/refresh", {
+        const response = await axios.get("http://localhost:4000/auth/refresh", {
           withCredentials: true,
         });
         localStorage.setItem("notes-token", response.data.accessToken);
-        console.log("NotesApi.prototype.URL", NotesApi.prototype.URL);
 
         return axiosInstance.request(originalRequest);
       } catch (error) {
@@ -83,23 +81,22 @@ class NotesApi {
 
   async logout() {
     const requestStr = `${this.URL}/auth/logout`;
-    return await axiosInstance.post(requestStr, { withCredentials: true });
+    return await axiosInstance.post(requestStr);
   }
 
   async checkAuth() {
     const requestStr = `${this.URL}/auth/refresh`;
     return await axios.get(requestStr, { withCredentials: true });
   }
+
   //
   // Работа с заметками:
   //
 
   async getData(requestStr: string) {
-    const response = await fetch(requestStr);
-    if (response.ok) {
-      return response.json();
-    }
-    return await Promise.reject(new Error("Ошибка. Что то пошло не так."));
+    // const response = await fetch(requestStr);
+    const response = await axiosInstance.get(requestStr);
+    return response.data;
   }
 
   fetchAllNotes(userId: string): Promise<INote[]> {
@@ -109,33 +106,25 @@ class NotesApi {
 
   async addNote(note: INewNote): Promise<INote[]> {
     const requestStr = `${this.URL}/notes`;
-
-    await axios.post(requestStr, note);
-
+    await axiosInstance.post(requestStr, note);
     return this.fetchAllNotes(note.userId);
   }
 
   async removeNote(id: string, userId: string): Promise<INote[]> {
     const requestStr = `${this.URL}/notes/${id}`;
-
-    await axios.delete(requestStr);
-
+    await axiosInstance.delete(requestStr);
     return this.fetchAllNotes(userId);
   }
 
   async removeSublist(id: string, userId: string): Promise<INote[]> {
     const requestStr = `${this.URL}/notes/remove-sublist/${id}`;
-
-    await axios.delete(requestStr);
-
+    await axiosInstance.delete(requestStr);
     return this.fetchAllNotes(userId);
   }
 
   async updateTextOfNote(id: string, updatedNote: INote): Promise<INote[]> {
     const requestStr = `${this.URL}/notes/${id}`;
-
-    await axios.put(requestStr, updatedNote);
-
+    await axiosInstance.put(requestStr, updatedNote);
     return this.fetchAllNotes(updatedNote.userId);
   }
 
@@ -146,9 +135,7 @@ class NotesApi {
     userId: string
   ): Promise<INote[]> {
     const requestStr = `${this.URL}/notes/move/${childId}?direction=${direction}`;
-
-    await axios.put(requestStr, parent);
-
+    await axiosInstance.put(requestStr, parent);
     return this.fetchAllNotes(userId);
   }
 }

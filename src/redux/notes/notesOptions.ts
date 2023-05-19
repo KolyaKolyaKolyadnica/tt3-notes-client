@@ -25,6 +25,7 @@ export const getAllNotes = createAsyncThunk(
     }
   }
 );
+
 export const addNewNote = createAsyncThunk(
   "notes/addNewNote",
   async (newNote: INewNote, thunkAPI) => {

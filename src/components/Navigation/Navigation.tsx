@@ -1,4 +1,10 @@
-import { Outlet, useOutletContext } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 import { useState } from "react";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
@@ -9,33 +15,42 @@ type ContextType = { isUserNeedRegistration: boolean };
 
 export default function Navigation() {
   const dispatch = useAppDispatch();
-  const { isAutorizated } = useAppSelector((store) => store.auth);
   const [isUserNeedRegistration, setIsUserNeedRegistration] = useState(false);
 
+  let location = useLocation();
+  let navigate = useNavigate();
+
+  const { user, isAutorizated, isLoading } = useAppSelector(
+    (store) => store.auth
+  );
   const clickOnLogoutBtn = () => {
     dispatch(logout());
     localStorage.removeItem("notes-token");
+
+    navigate("/auth");
   };
 
   return (
     <>
       <header className={style.header}>
-        <p className={style.text}>{false && "Username"}</p>
+        <p className={style.text}>
+          {location.pathname === "/" && user.username}
+        </p>
 
-        {isAutorizated ? (
+        {location.pathname === "/" ? (
           <button className={style.buttons} onClick={clickOnLogoutBtn}>
             Logout
           </button>
         ) : (
           <div className={style.btnGroup}>
             <button
-              className={style.buttons}
+              className={isUserNeedRegistration ? style.active : style.buttons}
               onClick={() => setIsUserNeedRegistration(true)}
             >
               Sign in
             </button>
             <button
-              className={style.buttons}
+              className={!isUserNeedRegistration ? style.active : style.buttons}
               onClick={() => setIsUserNeedRegistration(false)}
             >
               Log in

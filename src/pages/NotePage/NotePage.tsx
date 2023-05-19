@@ -7,48 +7,50 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./NotePage.module.css";
+import { checkAuth } from "../../redux/auth/authOptions";
 
 function NotePage() {
   const dispatch = useAppDispatch();
   const { notes, isLoading, error } = useAppSelector((store) => store.notes);
-  const { user, isAutorizated } = useAppSelector((store) => store.auth);
-  // const [allNotes, setAllNotes] = useState(notes);
+  // { user, isAutorizated }
+  const storeAuth = useAppSelector((store) => store.auth);
   let navigate = useNavigate();
 
-  if (!isAutorizated) {
-    navigate("/");
-  }
-
   // useEffect(() => {
-  //   if (isAutorizated) {
-  //     navigate("/");
+  //   if (
+  //     !storeAuth.user?.id &&
+  //     !storeAuth.isAutorizated &&
+  //     storeAuth.isLoading
+  //   ) {
+  //     navigate("/auth");
   //   }
   // }, []);
+
   useEffect(() => {
-    if (user?.id) {
-      dispatch(getAllNotes(user.id));
+    if (!storeAuth.isAutorizated && !storeAuth.isLoading) {
+      navigate("/auth");
     }
-  }, [user]);
-
-  // useEffect(() => {
-  //   setAllNotes(notes);
-  // }, [notes]);
+  }, [storeAuth.isAutorizated]);
 
   useEffect(() => {
-    if (!error) return;
-    toast.error(error);
-  }, [error]);
-
-  if (!user?.isActivated) {
-    return <h1>Please, go to your email for activated.</h1>;
-  }
+    if (storeAuth.user?.id) {
+      dispatch(getAllNotes(storeAuth.user.id));
+    }
+  }, [storeAuth.user]);
 
   return (
     <div className={isLoading ? style.appLoading : style.app}>
       <div className={style.content}>
-        {notes.length > 0 && <Note notes={notes} noteId={notes[0]._id} />}
+        {!storeAuth.user?.isActivated &&
+          notes[0] &&
+          storeAuth.isAutorizated && (
+            <h1>Please, go to your email for activated.</h1>
+          )}
+        {storeAuth.isLoading && <h1>Checking your authorization</h1>}
+        {notes.length > 0 && storeAuth.user.isActivated && (
+          <Note notes={notes} noteId={notes[0]._id} />
+        )}
       </div>
-      <ToastContainer />
     </div>
   );
 }

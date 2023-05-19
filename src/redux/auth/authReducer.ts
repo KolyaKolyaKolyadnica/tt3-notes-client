@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { checkAuth, login, logout, registration } from "./authOptions";
-import { IUserServerResponse } from "../../types/types";
+import { IError, IUserServerResponse } from "../../types/types";
 
 const initialState = {
   isLoading: false,
@@ -10,7 +10,7 @@ const initialState = {
 } as {
   isLoading: boolean;
   isAutorizated: boolean;
-  error: unknown | null;
+  error: IError | null;
   user: IUserServerResponse;
 };
 
@@ -44,6 +44,7 @@ const authSlice = createSlice({
       .addCase(checkAuth.fulfilled, (state, { payload }) => {
         state.error = null;
         state.isLoading = false;
+        state.isAutorizated = true;
         state.user = payload;
       })
 
@@ -64,21 +65,22 @@ const authSlice = createSlice({
 
       //Rejected
 
-      .addCase(logout.rejected, (state, { payload }) => {
+      .addCase(logout.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.error = payload;
       })
-      .addCase(login.rejected, (state, { payload }) => {
+      .addCase(login.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.error = payload;
       })
-      .addCase(registration.rejected, (state, { payload }) => {
+      .addCase(registration.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.error = payload;
       })
-      .addCase(checkAuth.rejected, (state, { payload }) => {
+      .addCase(checkAuth.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.error = payload;
+        // state.isAutorizated = false;
       });
   },
 });

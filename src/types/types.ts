@@ -1,3 +1,5 @@
+import { ifError } from "assert";
+
 export interface INote {
   _id: string;
   parentId: string | null;
@@ -18,4 +20,9 @@ export interface IUserServerResponse {
   email: string;
   username: string;
   isActivated: boolean;
+}
+export interface IError {
+  statusCode: number;
+  message: string;
+  error?: string;
 }

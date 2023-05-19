@@ -5,3 +5,7 @@
 3. Run server (default localhost 4000);
 4. Run client (default localhost 3000);
 5. Enjoy :D
+
+## Check
+
+- authReducer type of payload!? (now "any"). Maybe "unknow", but then err in App

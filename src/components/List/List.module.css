@@ -5,6 +5,9 @@
   flex-direction: column;
   gap: 20px;
 }
+.loading {
+  background-color: rgba(255, 146, 4, 0.259);
+}
 .emptyListText {
   font-size: 10px;
   color: #787878;

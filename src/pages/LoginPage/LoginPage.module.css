@@ -3,6 +3,7 @@
   flex-direction: column;
   padding: 50px;
   border: 1px solid #000;
+  border-top: none;
   gap: 10px;
 }
 .inputContainer {

@@ -66,21 +66,27 @@ const notesSlice = createSlice({
 
       .addCase(getAllNotes.pending, (state, { payload }) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(addNewNote.pending, (state, { payload }) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(removeNote.pending, (state, { payload }) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(removeSublist.pending, (state, { payload }) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(updateTextOfNote.pending, (state, { payload }) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(moveNote.pending, (state, { payload }) => {
         state.isLoading = true;
+        state.error = null;
       })
 
       //Rejected

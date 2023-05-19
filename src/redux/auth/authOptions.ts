@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/notesApi";
 import { AxiosResponse } from "axios";
-import { IUserServerResponse } from "../../types/types";
+import { IUserServerResponse, IError } from "../../types/types";
+import { getErrorPayload } from "../../utils/getErrorPayload";
 
 interface IUserBody {
   username?: string;
@@ -14,7 +15,7 @@ export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
     const { data } = await api.logout();
     return data;
   } catch (error: any) {
-    return thunkAPI.rejectWithValue(error.message);
+    return thunkAPI.rejectWithValue(error.response.data);
   }
 });
 
@@ -29,7 +30,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("notes-token", data.accessToken);
       return data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(getErrorPayload(error));
     }
   }
 );
@@ -43,7 +44,7 @@ export const registration = createAsyncThunk(
       localStorage.setItem("notes-token", data.accessToken);
       return data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(getErrorPayload(error));
     }
   }
 );
@@ -58,7 +59,7 @@ export const checkAuth = createAsyncThunk(
       localStorage.setItem("notes-token", data.accessToken);
       return data;
     } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );

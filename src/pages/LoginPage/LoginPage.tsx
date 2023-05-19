@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import style from "./LoginPage.module.css";
 import api from "../../api/notesApi";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { Navigate, useNavigate, useOutletContext } from "react-router-dom";
 import { useButtonFunction } from "../../components/Navigation/Navigation";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useAppSelector } from "../../hooks/useAppSelector";
@@ -9,7 +9,9 @@ import { login, registration } from "../../redux/auth/authOptions";
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
-  const { isAutorizated } = useAppSelector((store) => store.auth);
+  const { user, isAutorizated, isLoading } = useAppSelector(
+    (store) => store.auth
+  );
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,12 +19,12 @@ export default function LoginPage() {
   const { isUserNeedRegistration } = useButtonFunction();
 
   let navigate = useNavigate();
+
   useEffect(() => {
-    isAutorizated ? navigate("note") : navigate("");
+    if (isAutorizated && !isLoading) {
+      navigate("/");
+    }
   }, [isAutorizated]);
-  // if (isAutorizated) {
-  //   navigate("note");
-  // }
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,7 +43,7 @@ export default function LoginPage() {
     setEmail("");
     setPassword("");
 
-    navigate("note");
+    // navigate("/");
   };
   return (
     <form className={style.form} onSubmit={submit}>
@@ -61,7 +63,7 @@ export default function LoginPage() {
       <div className={style.inputContainer}>
         <p className={style.comment}>Email</p>
         <input
-          type="input"
+          type="email"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
@@ -74,6 +76,7 @@ export default function LoginPage() {
         <input
           autoComplete="on"
           type="password"
+          pattern="^().{6,}"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
@@ -83,11 +86,11 @@ export default function LoginPage() {
 
       {isUserNeedRegistration ? (
         <button type="submit" className={style.button}>
-          Registration
+          {isLoading ? "Loading..." : "Registration"}
         </button>
       ) : (
         <button type="submit" className={style.button}>
-          Login
+          {isLoading ? "Loading..." : "Login"}
         </button>
       )}
     </form>
