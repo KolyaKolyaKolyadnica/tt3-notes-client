@@ -1,30 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { getAllNotes } from "../../redux/notes/notesOptions";
 import Note from "../../components/Note/Note";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import style from "./NotePage.module.css";
-import { checkAuth } from "../../redux/auth/authOptions";
 
 function NotePage() {
   const dispatch = useAppDispatch();
   const { notes, isLoading, error } = useAppSelector((store) => store.notes);
-  // { user, isAutorizated }
   const storeAuth = useAppSelector((store) => store.auth);
   let navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (
-  //     !storeAuth.user?.id &&
-  //     !storeAuth.isAutorizated &&
-  //     storeAuth.isLoading
-  //   ) {
-  //     navigate("/auth");
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (!storeAuth.isAutorizated && !storeAuth.isLoading) {

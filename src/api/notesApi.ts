@@ -7,8 +7,6 @@ interface IUserBody {
   username?: string;
 }
 
-// Создание инстанса для axios. Для работы с headers.Authorization
-//
 const axiosInstance = axios.create({ withCredentials: true });
 axiosInstance.interceptors.request.use((config) => {
   config.headers.Authorization = `Bearer ${localStorage.getItem(
@@ -42,21 +40,6 @@ axiosInstance.interceptors.response.use(
     throw error;
   }
 );
-
-// Альтернативынй вариант для навешивания хедеров на все запросы axios
-//
-// const tokenHandler = {
-//   set(accessToken: string) {
-//     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-//   },
-//   unset() {
-//     axios.defaults.headers.common.Authorization = "";
-//   },
-// };
-//
-// "withCredentials" и другие опции можно указать так:
-// await axios.post(requestStr, { withCredentials: true })
-//
 
 class NotesApi {
   URL: string;
@@ -94,7 +77,6 @@ class NotesApi {
   //
 
   async getData(requestStr: string) {
-    // const response = await fetch(requestStr);
     const response = await axiosInstance.get(requestStr);
     return response.data;
   }

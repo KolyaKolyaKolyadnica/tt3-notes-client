@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from "react";
-import {
-  useLocation,
-  useNavigate,
-  useRoutes,
-  Navigate,
-} from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useRoutes } from "react-router-dom";
 import Navigation from "./components/Navigation/Navigation";
 import NotePage from "./pages/NotePage/NotePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import style from "./App.module.css";
 import { useAppDispatch } from "./hooks/useAppDispatch";
 import { useAppSelector } from "./hooks/useAppSelector";
 import { checkAuth } from "./redux/auth/authOptions";
-import api from "./api/notesApi";
-import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
-import { PublicRoute } from "./components/PublicRoute/PublicRoute";
 import { ToastContainer, toast } from "react-toastify";
+import style from "./App.module.css";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -28,9 +20,7 @@ function App() {
     const accessToken = localStorage.getItem("notes-token");
     if (accessToken) {
       dispatch(checkAuth());
-      // navigate("note");
     }
-    // navigate("/auth");
   }, []);
 
   useEffect(() => {
@@ -62,12 +52,10 @@ function App() {
   ]);
 
   return (
-    // <React.StrictMode>
     <div className={style.App}>
       {pages}
       <ToastContainer />
     </div>
-    // </React.StrictMode>
   );
 }
 

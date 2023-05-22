@@ -80,7 +80,6 @@ const authSlice = createSlice({
       .addCase(checkAuth.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.error = payload;
-        // state.isAutorizated = false;
       });
   },
 });

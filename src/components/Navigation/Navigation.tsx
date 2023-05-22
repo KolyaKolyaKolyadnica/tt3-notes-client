@@ -1,5 +1,4 @@
 import {
-  Navigate,
   Outlet,
   useLocation,
   useNavigate,
@@ -20,9 +19,7 @@ export default function Navigation() {
   let location = useLocation();
   let navigate = useNavigate();
 
-  const { user, isAutorizated, isLoading } = useAppSelector(
-    (store) => store.auth
-  );
+  const { user } = useAppSelector((store) => store.auth);
   const clickOnLogoutBtn = () => {
     dispatch(logout());
     localStorage.removeItem("notes-token");

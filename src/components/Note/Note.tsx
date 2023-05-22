@@ -1,4 +1,3 @@
-import style from "./Note.module.css";
 import { INote } from "../../types/types";
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
@@ -18,7 +17,7 @@ import Button from "../Button/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useAppSelector } from "../../hooks/useAppSelector";
-import store from "../../redux/store";
+import style from "./Note.module.css";
 
 let timer: ReturnType<typeof setTimeout>;
 
@@ -98,9 +97,6 @@ export default function Note({
   return (
     <>
       {currentNote.parentId === null ? (
-        //
-        // First Note
-        //
         <>
           <List
             notes={notes}
@@ -117,9 +113,6 @@ export default function Note({
           </Button>
         </>
       ) : (
-        //
-        // Other Notes
-        //
         <li className={style.note}>
           {removeCurrentNote && moveCurrentNote && (
             <HeaderOfNote

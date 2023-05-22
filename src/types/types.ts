@@ -1,5 +1,3 @@
-import { ifError } from "assert";
-
 export interface INote {
   _id: string;
   parentId: string | null;
@@ -15,7 +13,6 @@ export interface INewNote {
 }
 export interface IUserServerResponse {
   accessToken: string;
-  refreshToken: string;
   id: string;
   email: string;
   username: string;
