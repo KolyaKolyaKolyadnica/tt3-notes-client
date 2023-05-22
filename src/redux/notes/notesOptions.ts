@@ -90,3 +90,7 @@ export const moveNote = createAsyncThunk(
     }
   }
 );
+export const claerNotesFromRedux = createAsyncThunk(
+  "notes/claerNotesFromRedux",
+  () => {}
+);

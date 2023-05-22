@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useAppSelector } from "../../hooks/useAppSelector";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { logout } from "../../redux/auth/authOptions";
+import { claerNotesFromRedux } from "../../redux/notes/notesOptions";
 import style from "./Navigation.module.css";
 
 type ContextType = { isUserNeedRegistration: boolean };
@@ -24,6 +25,7 @@ export default function Navigation() {
     dispatch(logout());
     localStorage.removeItem("notes-token");
 
+    dispatch(claerNotesFromRedux());
     navigate("/auth");
   };
 

@@ -3,6 +3,7 @@ import api from "../../api/notesApi";
 import { AxiosResponse } from "axios";
 import { IUserServerResponse, IError } from "../../types/types";
 import { getErrorPayload } from "../../utils/getErrorPayload";
+import { notesSlice } from "../notes/notesReducer";
 
 interface IUserBody {
   username?: string;
@@ -13,6 +14,9 @@ interface IUserBody {
 export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
     const { data } = await api.logout();
+    localStorage.removeItem("notes-token");
+
+    // notesSlice.actions.clearNotesFromRedux();
     return data;
   } catch (error: any) {
     return thunkAPI.rejectWithValue(error.response.data);

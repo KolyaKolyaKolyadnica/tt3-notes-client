@@ -6,16 +6,9 @@ import {
   removeSublist,
   updateTextOfNote,
   moveNote,
+  claerNotesFromRedux,
 } from "./notesOptions";
 import { INote } from "../../types/types";
-
-const startingNote = {
-  _id: "App",
-  parentId: null,
-  text: "Start",
-  childrenId: [],
-  userId: "Просто временная заглушка",
-};
 
 interface IInitialState {
   notes: INote[];
@@ -28,7 +21,7 @@ const initialState = {
   error: null,
 } as IInitialState;
 
-const notesSlice = createSlice({
+export const notesSlice = createSlice({
   name: "notes",
   initialState,
   reducers: {},
@@ -60,6 +53,9 @@ const notesSlice = createSlice({
       .addCase(moveNote.fulfilled, (state, { payload }) => {
         state.notes = [...payload];
         state.isLoading = false;
+      })
+      .addCase(claerNotesFromRedux.fulfilled, (state, { payload }) => {
+        state.notes = [];
       })
 
       //Pending
